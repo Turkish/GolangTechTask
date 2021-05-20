@@ -4,7 +4,7 @@ option go_package = "github.com/buffup/GolangTechTask/pkg/api";
 
 service VotingService {
   rpc CreateVoteable(CreateVoteableRequest) returns (CreateVoteableResponse) {}
-  rpc ListVoteables(ListVoteableRequest) returns (ListVoteablesResponse) {}
+  rpc ListVoteables(ListVoteableRequest) returns (ListVoteableResponse) {}
   rpc CastVote(CastVoteRequest) returns (CastVoteResponse) {}
 }
 
