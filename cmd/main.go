@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	svc := api.NewVotingService(s)
+	svc := api.NewVotingService(*s)
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

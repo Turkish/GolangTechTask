@@ -16,11 +16,7 @@ const (
 	VoteablesTableName = "Voteables"
 )
 
-type Repository interface {
-	CreateVoteable(*api.Voteable) (string, error)
-	GetVoteables() ([]*api.Voteable, error)
-	CastVote()
-}
+
 
 type VoteableRepo struct {
 	db        *dynamodb.DynamoDB
@@ -140,10 +136,6 @@ func (vr *VoteableRepo) GetVoteables() ([]*api.Voteable, error) {
 	return res, nil
 }
 
-func (vr *VoteableRepo) CastVote() () {
-
-}
-
-func initDynamodb() {
-
+func (vr *VoteableRepo) CastVote() error {
+	return nil
 }

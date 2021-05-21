@@ -7,10 +7,10 @@ import (
 )
 
 type VotingService struct {
-	repo storage.Repository
+	repo storage.VoteableRepo
 }
 
-func NewVotingService(repo storage.Repository) VotingService {
+func NewVotingService(repo storage.VoteableRepo) VotingService {
 	return VotingService{repo}
 }
 
@@ -38,6 +38,7 @@ func (s VotingService) ListVoteables(ctx context.Context, request *ListVoteableR
 }
 
 func (s VotingService) CastVote(context.Context, *CastVoteRequest) (*CastVoteResponse, error) {
+
 	return nil, errors.New("not implemented")
 }
 
