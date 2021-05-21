@@ -16,8 +16,8 @@ const (
 )
 
 type Repository interface {
+	CreateVoteable(*api.Voteable) (string, error)
 	GetVoteables() ([]api.Voteable, error)
-	CreateVoteable(*api.CreateVoteableRequest) (api.CreateVoteableResponse, error)
 	CastVote()
 }
 
@@ -49,11 +49,10 @@ func (vr *VoteableRepo) CreateVoteable(v *api.Voteable) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	output, err := vr.db.PutItem(&dynamodb.PutItemInput{Item: av, TableName: vr.tableName})
+	_, err = vr.db.PutItem(&dynamodb.PutItemInput{Item: av, TableName: vr.tableName})
 	if err != nil {
 		return "", err
 	}
-	fmt.Printf("%+v", output)
 	return v.Uuid, nil
 }
 
@@ -108,29 +107,33 @@ func createTable(db *dynamodb.DynamoDB, input *dynamodb.CreateTableInput, refres
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Table %s deleted", *input.TableName)
+		fmt.Printf("Table %s deleted\n", *input.TableName)
 	}
 	_, err = db.CreateTable(input)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Table %s recreated", *input.TableName)
+	fmt.Printf("Table %s recreated\n", *input.TableName)
 
 	return nil
 }
 
-//
-//func (vr *VoteableRepo) GetVoteables() ([]api.Voteable, error) {
-//	params := &dynamodb.ScanInput{
-//		TableName:                 aws.String(VoteablesTableName),
-//	}
-//	result, err := vr.db.Scan(params)
-//}
-//
-//func (vr *VoteableRepo) CastVote() () {
-//
-//}
-//
-//func initDynamodb() {
-//
-//}
+
+func (vr *VoteableRepo) GetVoteables() ([]api.Voteable, error) {
+	params := &dynamodb.ScanInput{
+		TableName:                 vr.tableName,
+	}
+	result, err := vr.db.Scan(params)
+	if err != nil {
+		return nil, err
+	}
+	result
+}
+
+func (vr *VoteableRepo) CastVote() () {
+
+}
+
+func initDynamodb() {
+
+}
