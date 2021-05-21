@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/buffup/GolangTechTask/api"
 	"github.com/google/uuid"
+	"log"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 type Repository interface {
 	CreateVoteable(*api.Voteable) (string, error)
-	GetVoteables() ([]api.Voteable, error)
+	GetVoteables() ([]*api.Voteable, error)
 	CastVote()
 }
 
@@ -119,7 +120,7 @@ func createTable(db *dynamodb.DynamoDB, input *dynamodb.CreateTableInput, refres
 }
 
 
-func (vr *VoteableRepo) GetVoteables() ([]api.Voteable, error) {
+func (vr *VoteableRepo) GetVoteables() ([]*api.Voteable, error) {
 	params := &dynamodb.ScanInput{
 		TableName:                 vr.tableName,
 	}
@@ -127,7 +128,16 @@ func (vr *VoteableRepo) GetVoteables() ([]api.Voteable, error) {
 	if err != nil {
 		return nil, err
 	}
-	result
+	var res []*api.Voteable
+	for _, item := range result.Items {
+		v := &api.Voteable{}
+		err = dynamodbattribute.UnmarshalMap(item, v)
+		if err != nil {
+			log.Fatalf("Got error unmarshalling: %s", err)
+		}
+		res = append(res, v)
+	}
+	return res, nil
 }
 
 func (vr *VoteableRepo) CastVote() () {

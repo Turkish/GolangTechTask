@@ -18,7 +18,7 @@ package api
 //func init() {
 //	lis = bufconn.Listen(bufSize)
 //	s := grpc.NewServer()
-//	RegisterVotingServiceServer(s, main.NewService(storage.R))
+//	RegisterVotingServiceServer(s, main.NewVotingService(storage.R))
 //	go func() {
 //		if err := s.Serve(lis); err != nil {
 //			log.Fatalf("Server exited with error: %v", err)
