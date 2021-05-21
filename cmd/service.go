@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/buffup/GolangTechTask/api"
-	"github.com/buffup/GolangTechTask/domain"
 	"github.com/buffup/GolangTechTask/storage"
 	"google.golang.org/grpc"
 )
@@ -18,11 +17,7 @@ func NewService(repo storage.Repository) Service {
 }
 
 func (s Service) CreateVoteable(ctx context.Context, cvr *api.CreateVoteableRequest) (*api.CreateVoteableResponse, error) {
-	v := domain.Voteable{
-		Question: cvr.Question,
-		Answers: cvr.Answers,
-	}
-	uuid, err := s.repo.CreateVoteable(v)
+	//uuid, err := s.repo.CreateVoteable(cvr)
 	return nil, errors.New("not implemented")
 }
 
@@ -31,7 +26,7 @@ func (s Service) ListVoteables(ctx context.Context, in *api.ListVoteableRequest,
 }
 
 func (s Service) CastVote(context.Context, *api.CastVoteRequest) (*api.CastVoteResponse, error) {
-
+	return nil, errors.New("not implemented")
 }
 
 

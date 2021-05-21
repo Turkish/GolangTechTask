@@ -6,16 +6,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/buffup/GolangTechTask/api"
 	"github.com/buffup/GolangTechTask/storage"
-	"google.golang.org/grpc"
 	"log"
-	"net"
-	"os"
 )
 
 func main() {
 	c := aws.Config{
-		Region: aws.String(os.Getenv("us-east-1")),
+		Region: aws.String("us-east-1"),
 		Credentials: credentials.NewStaticCredentials("DUMMYIDEXAMPLE", "DUMMYEXAMPLEKEY", ""),
 		Endpoint: aws.String("http://localhost:8000"),
 	}
@@ -24,24 +22,20 @@ func main() {
 		panic(err)
 	}
 
-	svc := NewService(s)
+	_, err = s.CreateVoteable(&api.CreateVoteableRequest{Question: "Did player deserve red card?", Answers: []string{"YES", "NO"}})
 
-	ListTables(svc)
-	CreateTable(svc, "Movies")
-	ListTables(svc)
-	CreateTable(svc, "Films")
-	ListTables(svc)
-
-	lis, err := net.Listen("tcp", ":9000")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-
-	grpcServer := grpc.NewServer()
-
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %s", err)
-	}
+	//
+	//
+	//lis, err := net.Listen("tcp", ":9000")
+	//if err != nil {
+	//	log.Fatalf("failed to listen: %v", err)
+	//}
+	//
+	//grpcServer := grpc.NewServer()
+	//RegisterVotingServiceServer(grpcServer, NewService(s))
+	//if err := grpcServer.Serve(lis); err != nil {
+	//	log.Fatalf("failed to serve: %s", err)
+	//}
 }
 
 func CreateTable(svc *dynamodb.DynamoDB, tableName string) {
