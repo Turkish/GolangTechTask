@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/buffup/GolangTechTask/api"
 	"github.com/buffup/GolangTechTask/storage"
 	"google.golang.org/grpc"
@@ -16,11 +18,20 @@ func main() {
 		Credentials: credentials.NewStaticCredentials("DUMMYIDEXAMPLE", "DUMMYEXAMPLEKEY", ""),
 		Endpoint: aws.String("http://localhost:8000"),
 	}
-	s, err := storage.New(c)
+	sess, err := session.NewSession(c)
 	if err != nil {
 		panic(err)
 	}
-	svc := api.NewVotingService(*s)
+	db := dynamodb.New(sess, c)
+	voteableRepo, err := storage.NewVoteableRepo(*db)
+	if err != nil {
+		panic(err)
+	}
+	voteRepo, err := storage.NewVoteRepo(*db)
+	if err != nil {
+		panic(err)
+	}
+	svc := api.NewVotingService(*voteableRepo, *voteRepo)
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
